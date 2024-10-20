@@ -1,7 +1,8 @@
 import sys
-from helper import EXCEPTIONS
-from helper import sendDebug
-from helper import Stack, RuleSetConfigs, CheckType, JumpStatement
+# from module.helper import EXCEPTIONS
+# from module.helper import sendDebug
+# from module.helper import Stack, RuleSetConfigs, CheckType, JumpStatement
+from module import *
 
 # types: int, str, bool, list
 # comment: ??
@@ -12,6 +13,8 @@ from helper import Stack, RuleSetConfigs, CheckType, JumpStatement
 # --not in bytes, in length of the stack<list>--
 #default is 256 
 #All commands are run during the lexing
+
+#TODO: make a way to bypass lexing to set ruleset vals directly from file... wait that will fix everything aka wont need that one match statement
 
 Ruleset = RuleSetConfigs(ss=256, vs=False)
 filen = "./src/prog/test.ol"
@@ -39,7 +42,7 @@ for line in programL:
         continue
     if opcode.startswith("??"):
         #this is a comment ^
-        print("??comp")
+        sendDebug("?? cont", Ruleset)
         continue
     # deal with #OL,  #OL@ for commands
     if opcode.startswith("#ol"):
@@ -58,9 +61,8 @@ for line in programL:
         elif permutator == "!":
             match cmd.lower():
                 case "db":
-                    print("Debug Active")
                     Ruleset.setVal("db", True)
-        
+                    sendDebug("Debug Active", Ruleset)
         continue
 
     program.append(opcode)

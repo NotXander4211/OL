@@ -1,3 +1,5 @@
+import logging
+
 class TypeError(Exception):
     pass
 
@@ -91,6 +93,7 @@ def sendDebug(msg, rs: RuleSetConfigs): # rs = rule set
         return
     if rs.getVal("LG"):
         logfile = rs.getVal("LGFL")
-        pass #log message to file 
+        with open(logfile) as lf:
+            lf.write(msg) #log message to file 
         return
     print(msg)

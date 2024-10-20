@@ -33,7 +33,7 @@ OL Commands:
 
 #OL@ is for commands that relate to how the code is read and what needs to be created
 
-#OL! is for specialized lexer commands
+#OL! is for specialized commands(maybe ones that need to be set differently)
 
 #OL@ Current Commands:
 
