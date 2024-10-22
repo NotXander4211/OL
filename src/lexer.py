@@ -14,10 +14,9 @@ from module import *
 #default is 256 
 #All commands are run during the lexing
 
-#TODO: make a way to bypass lexing to set ruleset vals directly from file... wait that will fix everything aka wont need that one match statement
 
 Ruleset = RuleSetConfigs(ss=256, vs=False)
-filen = "./src/prog/test.ol"
+filen = "./src/prog/tester.ol"
 if len(sys.argv) >= 2:
     filen = sys.argv[1]
 
@@ -31,7 +30,7 @@ lt = {}
 for line in programL:
     args = line.split(" ")
     opcode = args[0].lower()
-    sendDebug(opcode, Ruleset)
+    sendDebug(f"--Lexer scan: {opcode}", Ruleset)
 
     if opcode == "":
         sendDebug("blank line cont", Ruleset)
@@ -63,6 +62,10 @@ for line in programL:
                 case "db":
                     Ruleset.setVal("db", True)
                     sendDebug("Debug Active", Ruleset)
+        elif permutator == "$":
+            Ruleset.setVal(cmd.lower(), findType(args[1])(args[2]))
+        elif permutator == "*":
+            rulesInit(Ruleset)
         continue
 
     program.append(opcode)
@@ -83,7 +86,7 @@ for line in programL:
                     program.append(False)
             case "list":
                 var = var.split(",")
-                for i in var:
+                for i in range(len(var)):
                     var[i] = var[i].strip()
                 program.append(var)
             case "var":
@@ -123,7 +126,7 @@ for line in programL:
                     program.append(False)
             case "list":
                 var = var.split(",")
-                for i in var:
+                for i in range(len(var)):
                     var[i] = var[i].strip()
                 program.append(var)
         tc += 1

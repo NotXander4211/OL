@@ -31,6 +31,10 @@ OL Commands:
 
 #OL will be the basic command
 
+#OL* to declare when the rs is done being set
+
+#OL$ for bypass commands(only use if you know what you are doing)
+
 #OL@ is for commands that relate to how the code is read and what needs to be created
 
 #OL! is for specialized commands(maybe ones that need to be set differently)
@@ -62,6 +66,8 @@ Stack Size: 256
 Variable stack: Disabled or Excluded
 
 Debug: Disabled
+
+used ruleSet vars: ss, ivs, evs, db, lg, lgfl, lgloc
 
 so java side only works with integers. print statements can be strings. 
 Will be adding more support for the python side, java is not looking to get many more updates :)
