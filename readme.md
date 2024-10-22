@@ -67,7 +67,7 @@ Variable stack: Disabled or Excluded
 
 Debug: Disabled
 
-used ruleSet vars: ss, ivs, evs, db, lg, lgfl, lgloc
+used ruleSet vars: ss, ivs, evs, db, lg, lgfl, lgloc, wlgfl
 
 so java side only works with integers. print statements can be strings. 
 Will be adding more support for the python side, java is not looking to get many more updates :)

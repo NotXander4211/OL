@@ -22,6 +22,8 @@ class RuleSetConfigs:
         return self.rules.get(val, None)
     def setVal(self, key, val):
         self.rules[key] = val
+    def __repr__(self):
+        return str(self.rules)
 
 class Stack:
     def __init__(self, size, vars):
@@ -105,5 +107,7 @@ def sendDebug(msg, rs: RuleSetConfigs): # rs = rule set
 
 def rulesInit(rs: RuleSetConfigs):
     if rs.getVal("lg"):
-        with open(f"{getLogLocation(rs)}{getLogFile(rs)}", "w"):
-            pass
+        if bool(rs.getVal("wlgfl")):
+            with open(f"{getLogLocation(rs)}{getLogFile(rs)}", "w"):
+                pass
+    sendDebug(rs, rs)

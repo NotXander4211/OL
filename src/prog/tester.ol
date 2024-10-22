@@ -1,5 +1,6 @@
 #OL$LGFL str log.txt
 #OL$LG bool True
+#OL$WLGFL str False
 
 #OL!DB
 #OL@IVS
