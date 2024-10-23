@@ -1,9 +1,9 @@
 #OL$LGFL str log.txt
-#OL$LG bool True
-#OL$WLGFL str False
+#OL$LG bool 1
 
 #OL!DB
 #OL@IVS
+??start file
 #OL*
 
 VAR STR x new

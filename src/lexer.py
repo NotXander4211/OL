@@ -63,7 +63,10 @@ for line in programL:
                     Ruleset.setVal("db", True)
                     sendDebug("Debug Active", Ruleset)
         elif permutator == "$":
-            Ruleset.setVal(cmd.lower(), findType(args[1])(args[2]))
+            if findType(args[1]) == bool:
+                Ruleset.setVal(cmd.lower(), bool(int(args[2])))
+            else:
+                Ruleset.setVal(cmd.lower(), findType(args[1])(args[2]))
         elif permutator == "*":
             rulesInit(Ruleset)
         continue

@@ -107,7 +107,7 @@ def sendDebug(msg, rs: RuleSetConfigs): # rs = rule set
 
 def rulesInit(rs: RuleSetConfigs):
     if rs.getVal("lg"):
-        if bool(rs.getVal("wlgfl")):
+        if not rs.getVal("wlgfl"):
             with open(f"{getLogLocation(rs)}{getLogFile(rs)}", "w"):
                 pass
     sendDebug(rs, rs)

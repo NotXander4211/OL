@@ -1,4 +1,4 @@
-{'ss': 256, 'vs': True, 'lgfl': 'log.txt', 'lg': True, 'wlgfl': 'False', 'db': True}
+{'ss': 256, 'vs': True, 'lgfl': 'log.txt', 'lg': True, 'wlgfl': False, 'db': True}
 --Lexer scan: 
 blank line cont
 --Lexer scan: var
