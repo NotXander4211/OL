@@ -188,3 +188,5 @@ while program[pc] != "halt":
     else:
         pc += 1
         raise EXCEPTIONS["OE"](opcode + "not implemented yet or not a possible opcode!")
+
+sendDebug("--Runner: Complete", Ruleset)
