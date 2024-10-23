@@ -1,13 +1,11 @@
 import sys
-# from module.helper import EXCEPTIONS
-# from module.helper import sendDebug
-# from module.helper import Stack, RuleSetConfigs, CheckType, JumpStatement
 from module import *
 
 # types: int, str, bool, list
 # comment: ??
 # #OL for commands
 # #OL@ for other commands 
+# #OL$ for bypass
 # #OL@SS size<int>
 # use that for stack size
 # --not in bytes, in length of the stack<list>--

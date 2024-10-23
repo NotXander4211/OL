@@ -11,7 +11,10 @@ class RestrictedUse(Exception):
 class OpcodeException(Exception):
     pass
 
-EXCEPTIONS = {"TE":TypeError, "MAE":MissingArgumentError, "RU":RestrictedUse, "OE":OpcodeException}
+class OutOfStackException(Exception):
+    pass
+
+EXCEPTIONS = {"TE":TypeError, "MAE":MissingArgumentError, "RU":RestrictedUse, "OE":OpcodeException, "OSE":OutOfStackException}
 
 findType = lambda x: str if x == 'str' else bool if x == 'bool' else int 
 
@@ -35,7 +38,10 @@ class Stack:
         self.pt = -1
     def push(self, value: int):
         self.pt += 1
-        self.buf[self.pt] = value
+        try:
+            self.buf[self.pt] = value
+        except IndexError as e:
+            raise OutOfStackException("Attemped to push, stack is full. increase stack size")
     def pop(self):
         #print(self.buf[self.pt])
         val = self.buf[self.pt]

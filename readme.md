@@ -33,7 +33,7 @@ OL Commands:
 
 #OL* to declare when the rs is done being set
 
-#OL$ for bypass commands(only use if you know what you are doing)
+#OL$ for bypass commands(only use if you know what you are doing)bools are 1 and 0
 
 #OL@ is for commands that relate to how the code is read and what needs to be created
 
