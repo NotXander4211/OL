@@ -4,12 +4,20 @@ blank line cont
 --Lexer scan: var
 --Lexer scan: var
 --Lexer scan: var
+--Lexer scan: var
 --Lexer scan: print
 --Lexer scan: halt
---Std Printer: ['var', 'y', 'func', 'fileio.read../src/logs/testtext.txt', 'var', 'nums', 'func', 'fileio.add.2-2', 'var', 'x', 10, 'print', '__var_stack__', 'halt']
+--Std Printer: ['var', 'y', 'func', 'fileio.read../src/logs/testtext.txt', 'var', 'line1', 'func', 'fileio.readline../src/logs/testtext.txt-1', 'var', 'nums', 'func', 'fileio.add.2-2', 'var', 'x', 10, 'print', '__var_stack__', 'halt']
 --Std Printer: {}
 --Runner: var
+Var-Func detected
+list fileio.read returned ['Hi we can read this file right?\n', 'This is also a new line!!\n']
 --Runner: var
+Var-Func detected
+list fileio.readline returned ['This is also a new line!!\n']
+--Runner: var
+Var-Func detected
+int fileio.add returned 4
 --Runner: var
 --Runner: print
 --Runner: Complete

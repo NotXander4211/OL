@@ -1,1 +1,2 @@
 Hi we can read this file right?
+This is also a new line!!

@@ -16,7 +16,11 @@ class OutOfStackException(Exception):
 
 class ModuleNotImportedException(Exception):
     pass
-EXCEPTIONS = {"MNI":ModuleNotImportedException, "TE":TypeError, "MAE":MissingArgumentError, "RU":RestrictedUse, "OE":OpcodeException, "OSE":OutOfStackException}
+
+class ReturnTypeInvalidException(Exception):
+    pass
+
+EXCEPTIONS = {"RTNV": ReturnTypeInvalidException,"MNI":ModuleNotImportedException, "TE":TypeError, "MAE":MissingArgumentError, "RU":RestrictedUse, "OE":OpcodeException, "OSE":OutOfStackException}
 
 findType = lambda x: str if x == 'str' else bool if x == 'bool' else int 
 

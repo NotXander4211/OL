@@ -201,16 +201,15 @@ while program[pc] != "halt":
             pc += 1
     elif opcode == "var":
         if program[pc + 1] == "func":
-            # print("func detected")
+            sendDebug("Var-Func detected", Ruleset)
             mod = program[pc + 2].split(".")
             returned = moduleFuncRunner(mod, ModulesImported)
             functionModule = mod[0]
             functionName = mod[1]
             module = __import__(functionModule)
             returnType = module.getReturnValue(functionName)
-            # print(returnType)
-            # print(returned)
-            match returnType:
+            sendDebug(f"{returnType} {functionModule}.{functionName} returned {returned}", Ruleset)
+            match returnType.lower():
                 case "int":
                     stack.pushVar(program[pc], int(returned))
                 case "str":
@@ -219,6 +218,10 @@ while program[pc] != "halt":
                     stack.pushVar(program[pc], bool(returned))
                 case "list":
                     stack.pushVar(program[pc], list(returned))
+                case "none":
+                    stack.pushVar(program[pc], None)
+                case default:
+                    raise EXCEPTIONS["RTNV"](f"Return type of {returnType} is not valid")
             pc += 3
         else:
             stack.pushVar(program[pc], program[pc + 1])
