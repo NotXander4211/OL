@@ -69,6 +69,12 @@ Debug: Disabled
 
 used ruleSet vars: ss, ivs, evs, db, lg, lgfl, lgloc, wlgfl
 
+MODULES:
+need to have run function and getReturnValue function. see fileiomain.py
+
+to set a var to a functions return use the func type
+
+
 so java side only works with integers. print statements can be strings. 
 Will be adding more support for the python side, java is not looking to get many more updates :)
 
