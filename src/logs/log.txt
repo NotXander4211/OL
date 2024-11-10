@@ -3,14 +3,13 @@
 blank line cont
 --Lexer scan: var
 --Lexer scan: var
---Lexer scan: print
---Lexer scan: push
+--Lexer scan: var
 --Lexer scan: print
 --Lexer scan: halt
---Std Printer: ['var', 'x', 'new', 'var', 'y', ['1', '2', '3', '4', '5'], 'print', '__var_stack__', 'push', '_var_', 'y', 'print', '__stack__', 'halt']
+--Std Printer: ['var', 'y', 'func', 'fileio.read../src/logs/testtext.txt', 'var', 'nums', 'func', 'fileio.add.2-2', 'var', 'x', 10, 'print', '__var_stack__', 'halt']
 --Std Printer: {}
 --Runner: var
 --Runner: var
+--Runner: var
 --Runner: print
---Runner: push
---Runner: print
+--Runner: Complete

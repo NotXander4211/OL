@@ -14,10 +14,13 @@ class OpcodeException(Exception):
 class OutOfStackException(Exception):
     pass
 
-EXCEPTIONS = {"TE":TypeError, "MAE":MissingArgumentError, "RU":RestrictedUse, "OE":OpcodeException, "OSE":OutOfStackException}
+class ModuleNotImportedException(Exception):
+    pass
+EXCEPTIONS = {"MNI":ModuleNotImportedException, "TE":TypeError, "MAE":MissingArgumentError, "RU":RestrictedUse, "OE":OpcodeException, "OSE":OutOfStackException}
 
 findType = lambda x: str if x == 'str' else bool if x == 'bool' else int 
 
+ModuleLibrary = ["fileio"]
 class RuleSetConfigs:
     def __init__(self, **kwargs):
         self.rules = kwargs
@@ -104,8 +107,6 @@ def sendDebug(msg, rs: RuleSetConfigs): # rs = rule set
     if not rs.getVal("db"):
         return
     if rs.getVal("lg"):
-        # logging.basicConfig(filename=logfile, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-        # logging.debug(msg)
         with open(f"{getLogLocation(rs)}{getLogFile(rs)}", "a") as lf:
             lf.write(f"{msg}\n") #log message to file 
         return
@@ -117,3 +118,9 @@ def rulesInit(rs: RuleSetConfigs):
             with open(f"{getLogLocation(rs)}{getLogFile(rs)}", "w"):
                 pass
     sendDebug(rs, rs)
+
+def moduleFuncRunner(mod, ModulesImported):
+    arguments = ".".join(mod[2:])
+    print(arguments)
+    print(mod)
+    return ModulesImported[mod[0].lower()].run(mod[1].lower(), arguments.split("-"))

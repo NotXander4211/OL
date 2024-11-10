@@ -1,4 +1,5 @@
 import sys
+
 from module import *
 
 # types: int, str, bool, list
@@ -14,7 +15,7 @@ from module import *
 
 
 Ruleset = RuleSetConfigs(ss=256, vs=False)
-filen = "./src/prog/tester.ol"
+filen = "./src/prog/anothertest.ol"
 if len(sys.argv) >= 2:
     filen = sys.argv[1]
 
@@ -22,6 +23,8 @@ programL = []
 with open(filen, "r") as file:
     programL = [line.strip() for line in file.readlines()]
 
+ModulesUsed = []
+ModulesImported = {}
 program = []
 tc = 0
 lt = {}
@@ -46,7 +49,7 @@ for line in programL:
         sendDebug("--Lexer: startswith #ol", Ruleset)
         permutator = opcode[3]
         cmd = opcode[4:]
-        if permutator == "@": 
+        if permutator == "@": #rules 
             sendDebug("--Lexer: " + cmd.lower(), Ruleset)
             match cmd.lower():
                 case "ss":         
@@ -55,12 +58,16 @@ for line in programL:
                     Ruleset.setVal("vs", True)
                 case "evs":
                     Ruleset.setVal("vs", False)
-        elif permutator == "!":
+        elif permutator == "!": #lexing
             match cmd.lower():
                 case "db":
                     Ruleset.setVal("db", True)
                     sendDebug("Debug Active", Ruleset)
-        elif permutator == "$":
+        elif permutator == "&": #imports:
+            if cmd.lower() in ModuleLibrary:
+                ModulesUsed.append(cmd.lower())
+                sendDebug(f"Module imported: {cmd.lower()}", Ruleset)
+        elif permutator == "$": #bypass
             if findType(args[1]) == bool:
                 Ruleset.setVal(cmd.lower(), bool(int(args[2])))
             else:
@@ -130,8 +137,18 @@ for line in programL:
                 for i in range(len(var)):
                     var[i] = var[i].strip()
                 program.append(var)
+            case "func":
+                program.append("func")
+                tc += 1
+                program.append(var)
+                
+
         tc += 1
     
+#modules importing
+for i in ModulesUsed:
+    ModulesImported[i.lower()] = __import__(i.lower())
+
 
 sendDebug(f"--Std Printer: {program}", Ruleset)
 sendDebug(f"--Std Printer: {lt}", Ruleset)
@@ -183,8 +200,36 @@ while program[pc] != "halt":
         else:
             pc += 1
     elif opcode == "var":
-        stack.pushVar(program[pc], program[pc + 1])
-        pc += 2
+        if program[pc + 1] == "func":
+            # print("func detected")
+            mod = program[pc + 2].split(".")
+            returned = moduleFuncRunner(mod, ModulesImported)
+            functionModule = mod[0]
+            functionName = mod[1]
+            module = __import__(functionModule)
+            returnType = module.getReturnValue(functionName)
+            # print(returnType)
+            # print(returned)
+            match returnType:
+                case "int":
+                    stack.pushVar(program[pc], int(returned))
+                case "str":
+                    stack.pushVar(program[pc], str(returned))
+                case "bool":
+                    stack.pushVar(program[pc], bool(returned))
+                case "list":
+                    stack.pushVar(program[pc], list(returned))
+            pc += 3
+        else:
+            stack.pushVar(program[pc], program[pc + 1])
+            pc += 2
+    elif len(mod := opcode.split(".")) >= 2:
+        if mod[0].lower() not in ModulesUsed:
+            raise EXCEPTIONS["MNI"](f"Module {mod[0].lower()} not imported")
+        else:
+            moduleFuncRunner(mod, ModulesImported)
+            sendDebug(f"Module System Running: List of line args: {mod}", Ruleset)
+            sendDebug(f"Arguments for Module {mod[0].lower()} function {mod[1].lower()}: {mod[2:]}", Ruleset)
     else:
         pc += 1
         raise EXCEPTIONS["OE"](opcode + "not implemented yet or not a possible opcode!")
