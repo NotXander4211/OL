@@ -1,2 +1,2 @@
 from .helper import *
-__all__ = ["moduleFuncRunner","ModuleLibrary","EXCEPTIONS", "Stack", "RuleSetConfigs", "CheckType", "JumpStatement", "sendDebug", "findType", "rulesInit"]
+__all__ = ["evaluateIfStatement", "moduleFuncRunner","ModuleLibrary","EXCEPTIONS", "Stack", "RuleSetConfigs", "CheckType", "JumpStatement", "sendDebug", "findType", "rulesInit"]

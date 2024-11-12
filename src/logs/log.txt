@@ -1,23 +1,45 @@
 {'ss': 256, 'vs': True, 'lgfl': 'log.txt', 'lg': True, 'db': True}
+--Lexer: Curline: []
+--Lexer: Curline Exception: list index out of range
 --Lexer scan: 
 blank line cont
+--Lexer: Curline: []
+--Lexer: Curline Exception: list index out of range
+--Lexer scan: ??var
+?? cont
+--Lexer: Curline: []
+--Lexer: Curline Exception: list index out of range
+--Lexer scan: ??var
+?? cont
+--Lexer: Curline: []
+--Lexer: Curline Exception: list index out of range
+--Lexer scan: ??var
+?? cont
+--Lexer: Curline: []
+--Lexer: Curline Exception: list index out of range
 --Lexer scan: var
---Lexer scan: var
---Lexer scan: var
---Lexer scan: var
+--Lexer: Curline: (['var', 'x', 10], 3)
+--Lexer scan: ??print
+?? cont
+--Lexer: Curline: []
+--Lexer: Curline Exception: list index out of range
+--Lexer scan: 
+blank line cont
+--Lexer: Curline: []
+--Lexer: Curline Exception: list index out of range
 --Lexer scan: print
+--Lexer: Curline: (['print', 'true'], 5)
+--Lexer scan: print
+--Lexer: Curline: (['print', 'false'], 6)
 --Lexer scan: halt
---Std Printer: ['var', 'y', 'func', 'fileio.read../src/logs/testtext.txt', 'var', 'line1', 'func', 'fileio.readline../src/logs/testtext.txt-1', 'var', 'nums', 'func', 'fileio.add.2-2', 'var', 'x', 10, 'print', '__var_stack__', 'halt']
+--Lexer: Curline: (['halt'], 11)
+--Std Printer: ['var', 'x', 10, ['if var x greaterthan int 9', 'print', 'true', 'endif'], 'print', 'false', 'halt']
 --Std Printer: {}
 --Runner: var
-Var-Func detected
-list fileio.read returned ['Hi we can read this file right?\n', 'This is also a new line!!\n']
---Runner: var
-Var-Func detected
-list fileio.readline returned ['This is also a new line!!\n']
---Runner: var
-Var-Func detected
-int fileio.add returned 4
---Runner: var
+Condition: ['var', 'x', 'greaterthan', 'int', '9']
+Statement: ['if var x greaterthan int 9', 'print', 'true', 'endif']
+If statement: [True, False, 'var', <class 'int'>, 'x', '9', 'greaterthan']
+SetVals: [10, 9]
+--Runner: print
 --Runner: print
 --Runner: Complete

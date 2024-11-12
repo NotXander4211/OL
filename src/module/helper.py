@@ -22,7 +22,7 @@ class ReturnTypeInvalidException(Exception):
 
 EXCEPTIONS = {"RTNV": ReturnTypeInvalidException,"MNI":ModuleNotImportedException, "TE":TypeError, "MAE":MissingArgumentError, "RU":RestrictedUse, "OE":OpcodeException, "OSE":OutOfStackException}
 
-findType = lambda x: str if x == 'str' else bool if x == 'bool' else int 
+findType = lambda x: str if x == 'str' else bool if x == 'bool' else int if x == 'int' else list if x == 'list' else 'var'
 
 ModuleLibrary = ["fileio"]
 class RuleSetConfigs:
@@ -104,6 +104,56 @@ def JumpStatement(statement, top):
                 raise MissingArgumentError("Missing argument for jump statement")
     return res
 
+def evaluateIfStatement(statement, _stack: Stack):
+    _condition = statement[0].split(" ")[1:]
+    sendDebug(f"Condition: {_condition}", RULES)
+    sendDebug(f"Statement: {statement}", RULES)
+    #form: if <type> <value/varname> <condition> <type> <value/varname>
+    type1, type2 = findType(_condition[0].lower()), findType(_condition[3].lower())
+    val1, val2 = _condition[1], _condition[4]
+    condition = _condition[2]
+    isvar1, isvar2 = True if type1 == 'var' else False, True if type2 == 'var' else False
+
+    sendDebug(f"If statement: {[isvar1, isvar2, type1, type2, val1, val2, condition]}", RULES)
+
+    if isvar1:
+        val1 = _stack.getVar(val1)
+    else:
+        val1 = type1(val1)
+
+    if isvar2:
+        val2 = _stack.getVar(val1)
+    else:
+        val2 = type2(val2)
+
+    sendDebug(f"SetVals: {[val1, val2]}", RULES)
+    match condition.lower():
+        case "equals":
+            try:
+                return True if val1 == val2 else False
+            except Exception as e:
+                raise Exception(f"what did you expect: {e}")
+        case "in":
+            try:
+                return True if val1 in val2 else False
+            except Exception as e:
+                raise Exception(f"what did you expect: {e}")
+        case "greaterthan":
+            try:
+                return True if val1 > val2 else False
+            except Exception as e:
+                raise Exception(f"what did you expect: {e}")
+        case "lessthan":
+            try:
+                return True if val1 < val2 else False
+            except Exception as e:
+                raise Exception(f"what did you expect: {e}")
+        
+        case _:
+            sendDebug("Error of some sort AKA condition does not exist ...", RULES)
+            return False
+
+
 getLogFile = lambda x: x.getVal("lgfl") or "log.txt"
 getLogLocation = lambda x: x.getVal("lgloc") or "./src/logs/"
 
@@ -116,15 +166,18 @@ def sendDebug(msg, rs: RuleSetConfigs): # rs = rule set
         return
     print(msg)
 
+RULES = None
 def rulesInit(rs: RuleSetConfigs):
+    global RULES
     if rs.getVal("lg"):
         if not rs.getVal("wlgfl"):
             with open(f"{getLogLocation(rs)}{getLogFile(rs)}", "w"):
                 pass
+    RULES = rs
     sendDebug(rs, rs)
 
 def moduleFuncRunner(mod, ModulesImported):
     arguments = ".".join(mod[2:])
-    print(arguments)
-    print(mod)
+    sendDebug(f"MFR args: {arguments}", RULES)
+    sendDebug(f"MFR mod: {mod}", RULES)
     return ModulesImported[mod[0].lower()].run(mod[1].lower(), arguments.split("-"))

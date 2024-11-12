@@ -13,6 +13,7 @@ from module import *
 #default is 256 
 #All commands are run during the lexing
 
+global Ruleset, filen, programL, ModulesUsed, ModulesImported, program, lt, linecount
 
 Ruleset = RuleSetConfigs(ss=256, vs=False)
 filen = "./src/prog/anothertest.ol"
@@ -26,24 +27,27 @@ with open(filen, "r") as file:
 ModulesUsed = []
 ModulesImported = {}
 program = []
-tc = 0
+linecount = 0
 lt = {}
-for line in programL:
+
+def lex(line, tc):
+    global Ruleset, filen, programL, ModulesUsed, ModulesImported, lt, linecount
+    program = []
     args = line.split(" ")
     opcode = args[0].lower()
     sendDebug(f"--Lexer scan: {opcode}", Ruleset)
 
     if opcode == "":
         sendDebug("blank line cont", Ruleset)
-        continue
+        return []
     if opcode.endswith(":"):
-        lt[opcode[:-1]] = tc+1
+        lt[opcode[:-1]] = linecount+1
         sendDebug("label':' cont", Ruleset)
-        continue
+        return []
     if opcode.startswith("??"):
         #this is a comment ^
         sendDebug("?? cont", Ruleset)
-        continue
+        return []
     # deal with #OL,  #OL@ for commands
     if opcode.startswith("#ol"):
         sendDebug("--Lexer: startswith #ol", Ruleset)
@@ -74,7 +78,7 @@ for line in programL:
                 Ruleset.setVal(cmd.lower(), findType(args[1])(args[2]))
         elif permutator == "*":
             rulesInit(Ruleset)
-        continue
+        return []
 
     program.append(opcode)
     tc += 1
@@ -144,6 +148,43 @@ for line in programL:
                 
 
         tc += 1
+    return program, tc
+
+ifseen = False
+ifBlock = []
+for line in programL:
+    if line.split(" ")[0].lower().startswith("if"):
+        ifseen = True
+        ifBlock.append(line)
+        continue
+
+    if ifseen:
+        if line.split(" ")[0].lower().startswith("endif"):
+            ifseen = False
+            ifBlock.append("endif")
+            program.append(ifBlock)
+            ifBlock = []
+            linecount += 1
+        else:
+            curLine = lex(line, linecount)
+            sendDebug(f"--Lexer: Curline: {curLine}", Ruleset)
+            try:
+                curLine[1]
+            except:
+                sendDebug(f"--Lexer: Curline Exception: {e}", Ruleset)
+                continue
+            for _code in curLine[0]:
+                ifBlock.append(_code)
+    else:
+        curLine = lex(line, linecount)
+        try:
+            sendDebug(f"--Lexer: Curline: {curLine}", Ruleset)
+            linecount += int(curLine[1])
+        except Exception as e:
+            sendDebug(f"--Lexer: Curline Exception: {e}", Ruleset)
+            continue
+        for _code in curLine[0]:
+            program.append(_code)
     
 #modules importing
 for i in ModulesUsed:
@@ -152,11 +193,12 @@ for i in ModulesUsed:
 
 sendDebug(f"--Std Printer: {program}", Ruleset)
 sendDebug(f"--Std Printer: {lt}", Ruleset)
-    
-pc = 0
+
+
 stack = Stack(Ruleset.getVal("ss"), Ruleset.getVal("vs"))
 
-while program[pc] != "halt":
+def run(program, pc):
+    global Ruleset, filen, programL, ModulesUsed, ModulesImported, lt, linecount, stack, opcode
     opcode = program[pc]
     sendDebug(f"--Runner: {opcode}", Ruleset)
     pc += 1
@@ -220,7 +262,7 @@ while program[pc] != "halt":
                     stack.pushVar(program[pc], list(returned))
                 case "none":
                     stack.pushVar(program[pc], None)
-                case default:
+                case _:
                     raise EXCEPTIONS["RTNV"](f"Return type of {returnType} is not valid")
             pc += 3
         else:
@@ -236,5 +278,24 @@ while program[pc] != "halt":
     else:
         pc += 1
         raise EXCEPTIONS["OE"](opcode + "not implemented yet or not a possible opcode!")
+    return pc
 
+ifpc = 0
+pc = 0
+
+while program[pc] != "halt":
+    if type(program[pc]) == list:
+        #if statement
+        block = program[pc]
+        ifStatement = block[0]
+        code = block[1:]
+        if evaluateIfStatement(block, stack):
+            while code[ifpc] != "endif":
+                ifpc = run(code, ifpc)
+            pc += 1
+        else:
+            pc += 1
+    else:
+        pc = run(program, pc)
+    
 sendDebug("--Runner: Complete", Ruleset)
