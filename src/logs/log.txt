@@ -18,7 +18,7 @@ blank line cont
 --Lexer: Curline: []
 --Lexer: Curline Exception: list index out of range
 --Lexer scan: var
---Lexer: Curline: (['var', 'x', 10], 3)
+--Lexer: Curline: (['var', 'x', 8], 3)
 --Lexer scan: ??print
 ?? cont
 --Lexer: Curline: []
@@ -33,13 +33,12 @@ blank line cont
 --Lexer: Curline: (['print', 'false'], 6)
 --Lexer scan: halt
 --Lexer: Curline: (['halt'], 11)
---Std Printer: ['var', 'x', 10, ['if var x greaterthan int 9', 'print', 'true', 'endif'], 'print', 'false', 'halt']
+--Std Printer: ['var', 'x', 8, ['if var x greaterthan int 9', 'print', 'true', 'endif'], 'print', 'false', 'halt']
 --Std Printer: {}
 --Runner: var
 Condition: ['var', 'x', 'greaterthan', 'int', '9']
 Statement: ['if var x greaterthan int 9', 'print', 'true', 'endif']
 If statement: [True, False, 'var', <class 'int'>, 'x', '9', 'greaterthan']
-SetVals: [10, 9]
---Runner: print
+SetVals: [8, 9]
 --Runner: print
 --Runner: Complete
