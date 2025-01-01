@@ -83,7 +83,7 @@ def lex(line, tc):
     program.append(opcode)
     tc += 1
     if opcode == "push":
-        #should give variable for now its only numbers(int)
+        #should give variables
         type_ = args[1]
         var = args[2]
         match type_.lower():
