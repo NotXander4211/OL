@@ -26,54 +26,59 @@ class Register:
         e = self.__subs[register][1]
         value = value.zfill(e-s)
         self.__value = self.__value[:s] + value + self.__value[e:]
-    # def __getattr__(self, name: str) -> str:
-    #     if name in self.__subs:
-    #         return self.getSubs(name)
-    # def __setattr__(self, name: str, value: str) -> None:
-    #     if name in self.__subs:
-    #         self.setSubs(name, value)
+    def getSubsList(self) -> dict:
+        return self.__subs
 class Cpu:
     def __init__(self) -> None:
-        self.rax = Register("RAX", 16)
-        self.rax.addSubs("EAX", 8, 16)
-        self.rax.setSubs("EAX", "11001100")
-        self.r8 = Register("R8", 16)
-        self.r8.addSubs("R8D", 8, 16)
-        self.r9 = Register("R9", 16)
-        self.r9.addSubs("R9D", 8, 16)
-        self.r8.setSubs("R8D", "00000001")
-        self.r9.setSubs("R9D", "00000010")
-        self.r10 = "00000001"
-        self.r11 = "00000010"
-        self.__registers = {"RAX": self.rax, "EAX": lambda: self.rax.getSubs("EAX")}
-        # print("-"+self.rax.getSubs("RAX")+"-")
-        # self.rax.setSubs("EAX", "1111")
-        # print("-"+self.rax.getSubs("RAX")+"-")
-        # self.rax = Register("RAX", 16)
-        # self.rax.addSubs("EAX", 8, 16)
-        # self.rax.eax = "11001111"
+        print("START CPU INIT")
+        self.CREATE_REGISTERS()
+        # TEMP CREATE_REGISTERS
+        self.rax = Register("rax", 16)
+        self.r8 = Register("r8", 16)
+        self.r9 = Register("r9", 16)
+        self.r10 = Register("r10", 16)
+        self.rax.addSubs("eax", 8, 16)
+        self.r8.addSubs("r8d", 8, 16)
+        self.r9.addSubs("r9d", 8, 16)
+        self.r10.addSubs("r10d", 8, 16)
+        self.lst = ["RAX", "R8", "R9", "R10"]
+        self.__registers = {} 
+        for i in self.lst:
+            for j in self.__getattribute__(i.lower()).getSubsList():
+                self.__registers[j.lower()] = i.lower()              
+        print(self.__registers)
+        # END TEMP CREATE_REGISTERS
+        print("END CPU INIT")
+
+    def CREATE_REGISTERS(self):
+        pass
     def add(self, R1: str, R2: str) -> None:
-        # self.registers["RAX"] = Adder.bit8Adder(self.registers[R1], self.registers[R2])
-        self.rax.setSubs("EAX", Adder.bit8Adder(self.__getattribute__(R1), self.__getattribute__(R2)))
-        print(self.rax.getSubs("RAX"))
+        self.setReg("EAX", Adder.bit8Adder(self.getReg(R1), self.getReg(R2)))
+        # print(self.getReg("RAX"))
     def clock(self) -> None:
         pass
-    def setReg(self, Register: str, Value: str) -> None:
-        # self.registers[Register] = Value
-        pass
     def getReg(self, Register: str) -> str:
-        return self.__registers[Register]()
+        Register = Register.lower()
+        # print(self.__getattribute__(self.__registers.get(Register)).getSubs(Register))
+        return self.__getattribute__(self.__registers.get(Register)).getSubs(Register)
+    def setReg(self, Register: str, Value: str) -> None:
+        Register = Register.lower()
+        self.__getattribute__(self.__registers.get(Register)).setSubs(Register, Value)
     def getMem(Address: str) -> str:
         pass
     def lenReg(Register: str) -> int:
         pass
 
-print("START CPU")
 c = Cpu()
-x = c.getReg("EAX")
-print(x)
-# c.add("r10", "r11")
-# c.setReg("R8", "00000001")
-# c.setReg("R9", "00000010")
-# c.add("R8", "R9")
-# print(c.registers)
+# c.setReg("R8D", "10001111")
+print(c.getReg("RAX"))
+print(c.getReg("EAX"))
+c.setReg("EAX", "11111111")
+print(c.getReg("EAX"))
+print(c.getReg("RAX"))
+c.setReg("R8D", "00000001")
+c.setReg("R9D", "00000010")
+print(c.getReg("R8D"), c.getReg("R9D"))
+c.add("R8D", "R9D")
+print(c.getReg("EAX"))
+print(c.getReg("RAX"))

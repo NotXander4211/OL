@@ -53,13 +53,21 @@ class Helper:
     def __init__(self):
         pass
     @staticmethod
-    def binToHexAndBack(_bin="", _hex="", fromHex=True):
-        if fromHex:
-            _hex = _hex[2:]
-            return bin(int(hex, 16))
-        else:
-            return hex(int(_bin, 2))
+    def binToHex(_bin: str) -> str:
+        return str(hex(int(_bin, 2)))
+    @staticmethod
+    def hexToBin(_hex: str) -> str:
+        _hex = _hex[2:]
+        return str(bin(int(_hex, 16)))[2:]
+    @staticmethod
+    def hexToDecimal(_hex: str) -> str:
+        return str(int(_hex, 16))
+    @staticmethod
+    def binToDecimal(_bin: str) -> str:
+        return str(int(_bin, 2))
         
 # --------------- TESTS ---------------
-print(Adder.bit8Adder("00000011", "00000001"))
-print(Adder.signedBit8Adder("00000011", "10000001"))
+# print(Adder.bit8Adder("00000011", "00000001"))
+# print(Adder.signedBit8Adder("00000011", "10000001"))
+print(Helper.binToHex("111111111"))
+print(Helper.hexToBin("0xFF"))
