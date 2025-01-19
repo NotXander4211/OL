@@ -1,5 +1,4 @@
 from cpumodule import *
-mem = PersistentMemory()
 
 class Register:
     def __init__(self, name: str, size: int) -> None:
@@ -33,6 +32,7 @@ class Cpu:
         print("START CPU INIT")
         self.CREATE_REGISTERS()
         # TEMP CREATE_REGISTERS
+        self.pc = Register("PC", 16)
         self.rax = Register("rax", 16)
         self.r8 = Register("r8", 16)
         self.r9 = Register("r9", 16)
@@ -48,37 +48,42 @@ class Cpu:
                 self.__registers[j.lower()] = i.lower()              
         print(self.__registers)
         # END TEMP CREATE_REGISTERS
+        self.mem = PersistentMemory(8)
         print("END CPU INIT")
 
     def CREATE_REGISTERS(self):
         pass
     def add(self, R1: str, R2: str) -> None:
         self.setReg("EAX", Adder.bit8Adder(self.getReg(R1), self.getReg(R2)))
-        # print(self.getReg("RAX"))
-    def clock(self) -> None:
+    def incPC(self) -> None: # increment Program Counter
         pass
+    def clock(self) -> None:
+        self.incPC()
     def getReg(self, Register: str) -> str:
         Register = Register.lower()
-        # print(self.__getattribute__(self.__registers.get(Register)).getSubs(Register))
         return self.__getattribute__(self.__registers.get(Register)).getSubs(Register)
     def setReg(self, Register: str, Value: str) -> None:
         Register = Register.lower()
         self.__getattribute__(self.__registers.get(Register)).setSubs(Register, Value)
-    def getMem(Address: str) -> str:
+    def getRom(self, address: str) -> str:
+        return self.mem.readRom(address)
+    def getRam(self, address):
+        return self.mem.getRam(address)
+    def setRam(self, address, value):
+        self.mem.writeRam(address, value)
+    def lenReg(self, Register: str) -> int:
         pass
-    def lenReg(Register: str) -> int:
-        pass
-
-c = Cpu()
-# c.setReg("R8D", "10001111")
-print(c.getReg("RAX"))
-print(c.getReg("EAX"))
-c.setReg("EAX", "11111111")
-print(c.getReg("EAX"))
-print(c.getReg("RAX"))
-c.setReg("R8D", "00000001")
-c.setReg("R9D", "00000010")
-print(c.getReg("R8D"), c.getReg("R9D"))
-c.add("R8D", "R9D")
-print(c.getReg("EAX"))
-print(c.getReg("RAX"))
+if __name__ == "__main__":
+    c = Cpu()
+    # c.setReg("R8D", "10001111")
+    print(c.getReg("RAX"))
+    print(c.getReg("EAX"))
+    c.setReg("EAX", "11111111")
+    print(c.getReg("EAX"))
+    print(c.getReg("RAX"))
+    c.setReg("R8D", "00000001")
+    c.setReg("R9D", "00000010")
+    print(c.getReg("R8D"), c.getReg("R9D"))
+    c.add("R8D", "R9D")
+    print(c.getReg("EAX"))
+    print(c.getReg("RAX"))

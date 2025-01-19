@@ -46,14 +46,18 @@ def lex(line, tc):
     elif opcode == "prt":
         program.append(args[1])
         tc += 1
+    elif opcode == "add":
+        program.append(args[1])
+        program.append(args[2])
+        tc += 2
     return program
 code = []
 for line in programL:
-    print(line)
+    # print(line)
     x = lex(line, 0)
     for i in x:
         code.append(i)
-print(code)
+# print(code)
 def run(program, pc, c):
     # for line in program
     opcode = program[pc]
@@ -67,6 +71,11 @@ def run(program, pc, c):
         reg = program[pc]
         print(c.getReg(reg))
         pc += 1
+    elif opcode == "add":
+        reg = program[pc]
+        reg2 = program[pc + 1]
+        c.add(reg, reg2)
+        pc += 2
     return pc
 c = cpu.Cpu()
 pc = 0

@@ -21,20 +21,18 @@ class Adder:
         return _sum, _carry
     @staticmethod
     def bit8Adder(b1: str, b2: str) -> str:
+        validLens = [8, 16, 32, 64]
         b1 = [int(i) for i in b1]
         b1 = b1[::-1]
         b2 = [int(i) for i in b2]
         b2 = b2[::-1]
-        if len(b1) > 8  or len(b2) > 8:
-            raise KeyError("Bits too long bruh")
+        if len(b1) not in validLens  or len(b2) not in validLens:
+            raise KeyError("Bits too long/short bruh")
         s, c = [], []
         _s, _c = Adder.halfAdder(b1[0], b2[0])
         s.append(_s)
         c.append(_c)
         for bb1, bb2 in zip(b1[1:], b2[1:]):
-            # print(bb1, bb2)
-            # print(s, c)
-            # print(bb1, bb2, c[-1])
             _s, _c = Adder.fullAdder(bb1, bb2, c[-1])
             s.append(_s)
             c.append(_c)
@@ -69,5 +67,5 @@ class Helper:
 # --------------- TESTS ---------------
 # print(Adder.bit8Adder("00000011", "00000001"))
 # print(Adder.signedBit8Adder("00000011", "10000001"))
-print(Helper.binToHex("111111111"))
-print(Helper.hexToBin("0xFF"))
+# print(Helper.binToHex("111111111"))
+# print(Helper.hexToBin("0xFF"))
