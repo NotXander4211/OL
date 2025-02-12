@@ -5,40 +5,23 @@
 blank line cont
 --Lexer: Curline: []
 --Lexer: Curline Exception: list index out of range
---Lexer scan: ??var
-?? cont
---Lexer: Curline: []
---Lexer: Curline Exception: list index out of range
---Lexer scan: ??var
-?? cont
---Lexer: Curline: []
---Lexer: Curline Exception: list index out of range
---Lexer scan: ??var
-?? cont
---Lexer: Curline: []
---Lexer: Curline Exception: list index out of range
 --Lexer scan: var
---Lexer: Curline: (['var', 'x', 8], 3)
---Lexer scan: ??print
-?? cont
---Lexer: Curline: []
---Lexer: Curline Exception: list index out of range
---Lexer scan: 
-blank line cont
---Lexer: Curline: []
---Lexer: Curline Exception: list index out of range
+--Lexer: Curline: (['var', 'x', 'new'], 3)
+--Lexer scan: var
+--Lexer: Curline: (['var', 'y', ['1', '2', '3', '4', '5']], 6)
 --Lexer scan: print
---Lexer: Curline: (['print', 'true'], 5)
+--Lexer: Curline: (['print', '__var_stack__'], 11)
+--Lexer scan: push
+--Lexer: Curline: (['push', '_var_', 'y'], 22)
 --Lexer scan: print
---Lexer: Curline: (['print', 'false'], 6)
+--Lexer: Curline: (['print', '__stack__'], 44)
 --Lexer scan: halt
---Lexer: Curline: (['halt'], 11)
---Std Printer: ['var', 'x', 8, ['if var x greaterthan int 9', 'print', 'true', 'endif'], 'print', 'false', 'halt']
+--Lexer: Curline: (['halt'], 87)
+--Std Printer: ['var', 'x', 'new', 'var', 'y', ['1', '2', '3', '4', '5'], 'print', '__var_stack__', 'push', '_var_', 'y', 'print', '__stack__', 'halt']
 --Std Printer: {}
 --Runner: var
-Condition: ['var', 'x', 'greaterthan', 'int', '9']
-Statement: ['if var x greaterthan int 9', 'print', 'true', 'endif']
-If statement: [True, False, 'var', <class 'int'>, 'x', '9', 'greaterthan']
-SetVals: [8, 9]
+--Runner: var
+--Runner: print
+--Runner: push
 --Runner: print
 --Runner: Complete

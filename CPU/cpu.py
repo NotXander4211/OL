@@ -30,7 +30,7 @@ class Register:
 class Cpu:
     def __init__(self) -> None:
         print("START CPU INIT")
-        self.CREATE_REGISTERS()
+        self.CREATE_REGISTERS("x86_64")
         # TEMP CREATE_REGISTERS
         self.pc = Register("PC", 16)
         self.rax = Register("rax", 16)
@@ -51,8 +51,12 @@ class Cpu:
         self.mem = PersistentMemory(8)
         print("END CPU INIT")
 
-    def CREATE_REGISTERS(self):
-        pass
+    def CREATE_REGISTERS(self, arch):
+        self.arch = arch
+    def syscall(self):
+        match self.getReg("RAX"):
+            case "0000000000000001":
+                print("Out")
     def add(self, R1: str, R2: str) -> None:
         self.setReg("EAX", Adder.bit8Adder(self.getReg(R1), self.getReg(R2)))
     def incPC(self) -> None: # increment Program Counter
@@ -73,6 +77,7 @@ class Cpu:
         self.mem.writeRam(address, value)
     def lenReg(self, Register: str) -> int:
         pass
+
 if __name__ == "__main__":
     c = Cpu()
     # c.setReg("R8D", "10001111")
@@ -87,3 +92,5 @@ if __name__ == "__main__":
     c.add("R8D", "R9D")
     print(c.getReg("EAX"))
     print(c.getReg("RAX"))
+    c.setReg("EAX", "00000001")
+    c.syscall()
