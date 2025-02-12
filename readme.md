@@ -7,6 +7,7 @@ types: int, str, bool, list(list may or may not work)
 Stack size is in length of the list not in bytes
 
 BASIC SYNTAX:
+
 PUSH <int>: used to push a number to the stack. can only push ints currently
 
 READ: used to get user input 
@@ -88,3 +89,5 @@ we changed to ol cuz it wasnt taken
 |========|
 
 good luck
+
+also idk about explaining the cpu part, thats not worthy of a documentation so im not gonna make it and also it is in this project since it also needs a lexer to lex the assembly so its kinda related to this but not really also i want to try to run the ol lang on this goofy cpu when it is finally all made
