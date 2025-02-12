@@ -53,10 +53,17 @@ class Cpu:
 
     def CREATE_REGISTERS(self, arch):
         self.arch = arch
+        match self.arch.lower():
+            case "x86_64":
+                self.X86_64REG()
+    def X86_64REG(self):
+        pass
     def syscall(self):
-        match self.getReg("RAX"):
-            case "0000000000000001":
-                print("Out")
+        match Helper.binToHex(self.getReg("RAX")):
+            case "0x01":
+                print("YEAH syscall works lmao")
+            case _:
+                print(Helper.binToHex(self.getReg("RAX")))
     def add(self, R1: str, R2: str) -> None:
         self.setReg("EAX", Adder.bit8Adder(self.getReg(R1), self.getReg(R2)))
     def incPC(self) -> None: # increment Program Counter

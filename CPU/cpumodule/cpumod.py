@@ -52,7 +52,12 @@ class Helper:
         pass
     @staticmethod
     def binToHex(_bin: str) -> str:
-        return str(hex(int(_bin, 2)))
+        num = hex(int(_bin, 2))[2:]
+        zf = len(num)
+        if len(num) % 2 != 0:
+            zf += 1
+        num = num.zfill(zf)
+        return f"0x{num}"
     @staticmethod
     def hexToBin(_hex: str) -> str:
         _hex = _hex[2:]

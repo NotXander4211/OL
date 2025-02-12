@@ -76,6 +76,8 @@ def run(program, pc, c):
         reg2 = program[pc + 1]
         c.add(reg, reg2)
         pc += 2
+    elif opcode == "syscall":
+        c.syscall()
     return pc
 c = cpu.Cpu()
 pc = 0
