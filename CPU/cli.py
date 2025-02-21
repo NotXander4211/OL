@@ -1,6 +1,7 @@
 import cpu
+import os
 c = cpu.Cpu()
-while (inp := input(">>> ").lower()) != "halt":
+while (inp := input(">>> ").lower()) not in ["halt", "exit", "quit"]:
     try:
         program = inp.split(" ")
         opcode = program[0]
@@ -21,13 +22,16 @@ while (inp := input(">>> ").lower()) != "halt":
             pc += 2
         elif opcode == "syscall":
             c.syscall()
-        elif opcode == "clear":
-            __import__("os").system("cls")
-        elif opcode == "lst":
+        elif opcode in ["clear", "cls"]:
+            os.system("cls")
+        elif opcode in ["reglist"]:
+            print(c.enumerateReg())
+        elif opcode in ["lst", "ls", "list"]:
             print("MOV <reg> <val: hex>")
             print("PRT <reg>")
             print("ADD <reg> <reg>")
             print("syscall")
+            print("reglist")
             print("clear | lst | halt")
     except Exception as e:
         print(e)

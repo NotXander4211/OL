@@ -84,6 +84,8 @@ class Cpu:
         self.mem.writeRam(address, value)
     def lenReg(self, Register: str) -> int:
         pass
+    def enumerateReg(self) -> list:
+        return self.__registers
 
 if __name__ == "__main__":
     c = Cpu()
