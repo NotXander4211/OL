@@ -1,4 +1,4 @@
-from cpumodule import *
+from cpumodule import * 
 
 class Register:
     def __init__(self, name: str, size: int) -> None:
@@ -41,7 +41,8 @@ class Cpu:
         self.r8.addSubs("r8d", 8, 16)
         self.r9.addSubs("r9d", 8, 16)
         self.r10.addSubs("r10d", 8, 16)
-        self.lst = ["RAX", "R8", "R9", "R10"]
+        self.Regs = {}
+        self.lst = ["PC", "RAX", "R8", "R9", "R10"]
         self.__registers = {} 
         for i in self.lst:
             for j in self.__getattribute__(i.lower()).getSubsList():
@@ -58,21 +59,31 @@ class Cpu:
                 self.X86_64REG()
     def X86_64REG(self):
         pass
-    def syscall(self):
+    def syscall(self): 
         match Helper.binToHex(self.getReg("RAX")):
             case "0x01":
-                print("YEAH syscall works lmao")
+                print("read fd")
             case _:
                 print(Helper.binToHex(self.getReg("RAX")))
     def add(self, R1: str, R2: str) -> None:
         self.setReg("EAX", Adder.bit8Adder(self.getReg(R1), self.getReg(R2)))
+    def getLenOfInstruction(self):
+        opcode = int(self.getRom(self.getReg("PC")), 2)
+        # OPCODE must begin with the number of args
+        match opcode:
+            case num if num >= 1 and num <= 10:
+                return 1
+            case num if num >= 11 and num <= 20:
+                return 2
+            case num if num >= 21 and num <= 30:
+                return 3
     def incPC(self) -> None: # increment Program Counter
-        pass
+        self.setReg("PC", Helper.bit8Adder(self.getReg("PC"), self.getLenOfInstruction()))
     def clock(self) -> None:
         self.incPC()
     def getReg(self, Register: str) -> str:
         Register = Register.lower()
-        return self.__getattribute__(self.__registers.get(Register)).getSubs(Register)
+        # return self.__getattribute__(self.__registers.get(Register)).getSubs(Register)
     def setReg(self, Register: str, Value: str) -> None:
         Register = Register.lower()
         self.__getattribute__(self.__registers.get(Register)).setSubs(Register, Value)
@@ -86,6 +97,8 @@ class Cpu:
         pass
     def enumerateReg(self) -> list:
         return self.__registers
+    def RUN(self) -> None:
+        pass
 
 if __name__ == "__main__":
     c = Cpu()
@@ -102,4 +115,4 @@ if __name__ == "__main__":
     print(c.getReg("EAX"))
     print(c.getReg("RAX"))
     c.setReg("EAX", "00000001")
-    c.syscall()
+    # c.syscall()
